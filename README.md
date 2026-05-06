@@ -1,4 +1,4 @@
-# Financeiro PRO - Gestão Inteligente de Despesas 🚀
+# Financeiro PRO - Gestão Inteligente de Despesas 
 
 [![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.5-brightgreen)](https://spring.io/projects/spring-boot)
 [![Java](https://img.shields.io/badge/Java-17-orange)](https://www.oracle.com/java/)
@@ -7,7 +7,7 @@
 
 O **Financeiro PRO** é uma aplicação completa de gestão financeira desenvolvida para empresas que buscam controle total sobre seus gastos por filiais e categorias. Este projeto faz parte do meu portfólio de desenvolvedor e demonstra o uso de tecnologias modernas no ecossistema Java.
 
-## ✨ Funcionalidades
+##  Funcionalidades
 
 - **Dashboard Inteligente:** Visão geral de gastos com gráficos interativos (Chart.js), comparativos por filial e categorias.
 - **Importação de Dados:** Processamento em lote de planilhas Excel (.xlsx) e arquivos CSV.
@@ -16,14 +16,14 @@ O **Financeiro PRO** é uma aplicação completa de gestão financeira desenvolv
 - **Segurança:** Autenticação completa via Spring Security.
 - **Design Premium:** Interface responsiva, moderna e intuitiva construída com Tailwind CSS.
 
-## 🛠️ Tecnologias Utilizadas
+##  Tecnologias Utilizadas
 
 - **Backend:** Java 17, Spring Boot 3, Spring Data JPA, Spring Security.
 - **Frontend:** Thymeleaf, Tailwind CSS, FontAwesome, Chart.js.
 - **Banco de Dados:** MySQL.
 - **Ferramentas:** Maven, Apache POI (Excel).
 
-## 🚀 Como Executar o Projeto
+##  Como Executar o Projeto
 
 ### Pré-requisitos
 - JDK 17 ou superior.
@@ -33,7 +33,7 @@ O **Financeiro PRO** é uma aplicação completa de gestão financeira desenvolv
 ### Passos
 1. Clone este repositório:
    ```bash
-   git clone https://github.com/SEU_USUARIO/projeto-financeiro.git
+   git clone https://github.com/igoorpireess/projeto-financeiro.git
    ```
 2. Crie o banco de dados no MySQL:
    ```sql
@@ -47,4 +47,4 @@ O **Financeiro PRO** é uma aplicação completa de gestão financeira desenvolv
 5. Acesse `http://localhost:8080` (admin/admin123).
 
 ---
-Desenvolvido por [Seu Nome](https://github.com/SEU_USUARIO)
+Desenvolvido por Igor Pires(https://github.com/igoorpireess)
