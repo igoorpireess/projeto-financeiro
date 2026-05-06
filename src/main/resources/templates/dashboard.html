@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="bg-[#f8fafc] flex">
+
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="flex-1 ml-72">
+        <header class="h-20 bg-white/70 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-40">
+            <h1 class="text-xl font-bold text-gray-800">Visão Geral</h1>
+            
+            <form th:action="@{/dashboard}" method="get" class="flex items-center gap-4 bg-gray-100/50 p-1.5 rounded-2xl border border-gray-200/50">
+                <input type="date" name="inicio" th:value="${inicio}" class="bg-transparent border-0 text-sm focus:ring-0 text-gray-600 font-medium px-4">
+                <div class="w-px h-4 bg-gray-300"></div>
+                <input type="date" name="fim" th:value="${fim}" class="bg-transparent border-0 text-sm focus:ring-0 text-gray-600 font-medium px-4">
+                <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-bold shadow-lg shadow-indigo-200 hover:scale-105 transition active:scale-95">
+                    Filtrar
+                </button>
+            </form>
+        </header>
+
+        <main class="p-10 space-y-10">
+            <!-- Top Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Card Total -->
+                <div class="gradient-primary p-6 rounded-[2rem] text-white shadow-2xl shadow-indigo-200 relative overflow-hidden group">
+                    <div class="relative z-10">
+                        <p class="text-indigo-100 text-sm font-medium mb-1">Gasto Total no Período</p>
+                        <h2 class="text-3xl font-bold mb-4" th:text="'R$ ' + ${somaTotal != null ? somaTotal : '0,00'}">R$ 0,00</h2>
+                        <div class="flex items-center gap-2 text-xs bg-white/20 w-fit px-3 py-1 rounded-full backdrop-blur-sm">
+                            <i class="fas fa-arrow-up"></i>
+                            <span>12% em relação ao mês anterior</span>
+                        </div>
+                    </div>
+                    <i class="fas fa-wallet absolute -right-6 -bottom-6 text-9xl text-white/10 group-hover:scale-110 transition duration-700"></i>
+                </div>
+
+                <!-- Card Registros -->
+                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500 relative overflow-hidden group">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-receipt text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Lançamentos</p>
+                            <h3 class="text-2xl font-bold text-gray-800" th:text="${totalRegistros}">0</h3>
+                        </div>
+                    </div>
+                    <div class="h-1 w-full bg-gray-50 rounded-full overflow-hidden">
+                        <div class="h-full bg-emerald-500 w-[65%]"></div>
+                    </div>
+                    <p class="text-[10px] text-gray-400 mt-2 uppercase font-bold tracking-wider">65% da meta de registros</p>
+                </div>
+
+                <!-- Card Filiais -->
+                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-amber-50 text-amber-500 rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-building text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Filiais Ativas</p>
+                            <h3 class="text-2xl font-bold text-gray-800" th:text="${dadosFilial.size()}">0</h3>
+                        </div>
+                    </div>
+                    <div class="flex -space-x-2">
+                        <div class="w-8 h-8 rounded-full border-2 border-white bg-indigo-100 flex items-center justify-center text-[10px] font-bold text-indigo-600">M</div>
+                        <div class="w-8 h-8 rounded-full border-2 border-white bg-emerald-100 flex items-center justify-center text-[10px] font-bold text-emerald-600">S</div>
+                        <div class="w-8 h-8 rounded-full border-2 border-white bg-amber-100 flex items-center justify-center text-[10px] font-bold text-amber-600">N</div>
+                    </div>
+                </div>
+
+                <!-- Card Categoria Principal -->
+                <div class="bg-white p-6 rounded-[2rem] border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-500">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-12 h-12 bg-purple-50 text-purple-500 rounded-2xl flex items-center justify-center">
+                            <i class="fas fa-crown text-xl"></i>
+                        </div>
+                        <div>
+                            <p class="text-gray-400 text-sm font-medium">Top Categoria</p>
+                            <h3 class="text-xl font-bold text-gray-800">Análise Ativa</h3>
+                        </div>
+                    </div>
+                    <p class="text-xs text-gray-400">Representa 40% dos gastos totais.</p>
+                </div>
+            </div>
+
+            <!-- Charts & Recent -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-10">
+                <!-- Main Chart -->
+                <div class="lg:col-span-2 bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                    <div class="flex items-center justify-between mb-10">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800">Análise por Filial</h3>
+                            <p class="text-sm text-gray-400">Comparativo de gastos por unidade de negócio</p>
+                        </div>
+                        <button class="text-indigo-600 font-bold text-sm hover:underline">Ver detalhes</button>
+                    </div>
+                    <div class="h-[400px]">
+                        <canvas id="filialChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Recent Transactions -->
+                <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                    <h3 class="text-xl font-bold text-gray-800 mb-8">Lançamentos Recentes</h3>
+                    <div class="space-y-6">
+                        <div th:each="d : ${recentes}" class="flex items-center justify-between group cursor-pointer">
+                            <div class="flex items-center gap-4">
+                                <div class="w-10 h-10 bg-gray-50 text-gray-400 group-hover:bg-indigo-50 group-hover:text-indigo-500 rounded-xl flex items-center justify-center transition">
+                                    <i class="fas fa-file-invoice"></i>
+                                </div>
+                                <div class="overflow-hidden">
+                                    <p class="text-sm font-bold text-gray-800 truncate w-32" th:text="${d.descricao}">Descrição</p>
+                                    <p class="text-[10px] text-gray-400 uppercase font-bold" th:text="${d.categoria.nome}">Categoria</p>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <p class="text-sm font-bold text-gray-800" th:text="'R$ ' + ${d.valor}">R$ 0,00</p>
+                                <p class="text-[10px] text-gray-400" th:text="${#temporals.format(d.data, 'dd MMM')}">01 Mai</p>
+                            </div>
+                        </div>
+                        <div th:if="${recentes.empty}" class="text-center py-10">
+                            <p class="text-gray-400 text-sm italic">Nenhuma transação recente</p>
+                        </div>
+                    </div>
+                    <button class="w-full mt-10 py-4 border-2 border-dashed border-gray-100 rounded-2xl text-gray-400 text-sm font-bold hover:border-indigo-200 hover:text-indigo-500 transition">
+                        Ver todas as transações
+                    </button>
+                </div>
+            </div>
+
+            <!-- Secondary Charts -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 pb-10">
+                <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                    <h3 class="text-xl font-bold text-gray-800 mb-8">Mix de Categorias</h3>
+                    <div class="h-64">
+                        <canvas id="categoriaChart"></canvas>
+                    </div>
+                </div>
+                <div class="bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm">
+                    <h3 class="text-xl font-bold text-gray-800 mb-8">Tendência Semanal</h3>
+                    <div class="flex items-center justify-center h-64 bg-gray-50 rounded-[2rem] border-2 border-dashed border-gray-200">
+                        <div class="text-center">
+                            <i class="fas fa-lock text-3xl text-gray-300 mb-4"></i>
+                            <p class="text-sm text-gray-400 font-medium">Recurso disponível na<br><span class="text-indigo-600 font-bold uppercase tracking-widest text-[10px]">Versão Gold</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const filialData = /*[[${dadosFilial}]]*/ [];
+        const categoriaData = /*[[${dadosCategoria}]]*/ [];
+
+        Chart.defaults.font.family = "'Outfit', sans-serif";
+        Chart.defaults.color = '#94a3b8';
+
+        // Filial Chart (Area Chart style)
+        const ctxFilial = document.getElementById('filialChart').getContext('2d');
+        const gradient = ctxFilial.createLinearGradient(0, 0, 0, 400);
+        gradient.addColorStop(0, 'rgba(79, 70, 229, 0.4)');
+        gradient.addColorStop(1, 'rgba(79, 70, 229, 0)');
+
+        new Chart(ctxFilial, {
+            type: 'bar',
+            data: {
+                labels: filialData.map(item => item[0] || 'N/A'),
+                datasets: [{
+                    label: 'Gasto por Filial',
+                    data: filialData.map(item => item[1]),
+                    backgroundColor: 'rgba(79, 70, 229, 0.8)',
+                    borderRadius: 15,
+                    borderSkipped: false,
+                    barThickness: 40
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { display: false, drawBorder: false }
+                    },
+                    x: {
+                        grid: { display: false, drawBorder: false }
+                    }
+                }
+            }
+        });
+
+        // Categoria Chart
+        const ctxCat = document.getElementById('categoriaChart').getContext('2d');
+        new Chart(ctxCat, {
+            type: 'doughnut',
+            data: {
+                labels: categoriaData.map(item => item[0]),
+                datasets: [{
+                    data: categoriaData.map(item => item[1]),
+                    backgroundColor: ['#4f46e5', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'],
+                    borderWidth: 0,
+                    hoverOffset: 20
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                cutout: '80%',
+                plugins: {
+                    legend: { position: 'right', labels: { usePointStyle: true, padding: 20 } }
+                }
+            }
+        });
+        /*]]>*/
+    </script>
+</body>
+</html>

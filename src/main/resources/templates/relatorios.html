@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head}"></head>
+<body class="bg-[#f8fafc] flex">
+
+    <aside th:replace="~{fragments/layout :: sidebar}"></aside>
+
+    <div class="flex-1 ml-72">
+        <header class="h-20 bg-white/70 backdrop-blur-md border-b border-gray-100 flex items-center justify-between px-10 sticky top-0 z-40">
+            <h1 class="text-xl font-bold text-gray-800">Relatórios Detalhados</h1>
+            <div class="flex gap-4">
+                <button onclick="window.print()" class="bg-white border border-gray-200 text-gray-600 px-6 py-2.5 rounded-xl text-sm font-bold shadow-sm hover:bg-gray-50 transition">
+                    <i class="fas fa-print mr-2"></i> Imprimir
+                </button>
+                <button class="gradient-primary text-white px-6 py-2.5 rounded-xl text-sm font-bold shadow-lg shadow-indigo-200 hover:scale-105 transition">
+                    <i class="fas fa-file-export mr-2"></i> Exportar PDF
+                </button>
+            </div>
+        </header>
+
+        <main class="p-10">
+            <!-- Filter Bar -->
+            <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 p-8 mb-10">
+                <form th:action="@{/relatorios}" method="get" class="flex flex-wrap items-end gap-6">
+                    <div class="flex-1 min-w-[200px]">
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-3 ml-1 tracking-widest">Filtrar por Filial</label>
+                        <select name="filial" class="w-full px-5 py-4 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium">
+                            <option value="">Todas as Unidades</option>
+                            <option th:each="f : ${filiais}" th:value="${f}" th:text="${f}" 
+                                    th:selected="${f == filialSelecionada}"></option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-3 ml-1 tracking-widest">Data Inicial</label>
+                        <input type="date" name="inicio" th:value="${inicio}" 
+                               class="px-5 py-4 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-gray-400 uppercase mb-3 ml-1 tracking-widest">Data Final</label>
+                        <input type="date" name="fim" th:value="${fim}" 
+                               class="px-5 py-4 bg-gray-50 border-0 rounded-2xl focus:ring-2 focus:ring-indigo-500 outline-none text-sm font-medium">
+                    </div>
+                    <button type="submit" class="bg-dark text-white px-8 py-4 rounded-2xl font-bold shadow-xl hover:bg-indigo-600 transition active:scale-95">
+                        <i class="fas fa-search mr-2"></i> Aplicar Filtros
+                    </button>
+                </form>
+            </div>
+
+            <!-- Results Table -->
+            <div class="bg-white rounded-[2.5rem] shadow-sm border border-gray-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50/50 text-gray-400 text-[10px] uppercase font-bold tracking-widest">
+                            <tr>
+                                <th class="px-10 py-6">Data</th>
+                                <th class="px-10 py-6">Descrição da Despesa</th>
+                                <th class="px-10 py-6">Categoria</th>
+                                <th class="px-10 py-6">Filial</th>
+                                <th class="px-10 py-6 text-right">Valor Bruto</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-50">
+                            <tr th:each="d : ${despesas}" class="hover:bg-gray-50/50 transition">
+                                <td class="px-10 py-6">
+                                    <span class="text-sm font-medium text-gray-500" th:text="${#temporals.format(d.data, 'dd/MM/yyyy')}">01/01/2024</span>
+                                </td>
+                                <td class="px-10 py-6">
+                                    <p class="text-sm font-bold text-gray-800" th:text="${d.descricao}">Descrição</p>
+                                    <p class="text-[10px] text-gray-400" th:text="${d.observacao != null ? d.observacao : 'Sem observações'}">Obs</p>
+                                </td>
+                                <td class="px-10 py-6">
+                                    <div class="flex items-center gap-2">
+                                        <div class="w-2 h-2 rounded-full bg-indigo-500"></div>
+                                        <span class="text-xs font-bold text-gray-600 uppercase tracking-tighter" th:text="${d.categoria.nome}">Escritório</span>
+                                    </div>
+                                </td>
+                                <td class="px-10 py-6">
+                                    <span class="px-3 py-1 bg-gray-100 rounded-lg text-[10px] font-bold text-gray-500" th:text="${d.filial}">Matriz</span>
+                                </td>
+                                <td class="px-10 py-6 text-right">
+                                    <span class="text-base font-black text-dark" th:text="'R$ ' + ${d.valor}">R$ 0,00</span>
+                                </td>
+                            </tr>
+                            <tr th:if="${despesas.empty}">
+                                <td colspan="5" class="px-10 py-24 text-center">
+                                    <div class="w-24 h-24 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
+                                        <i class="fas fa-search text-3xl text-gray-200"></i>
+                                    </div>
+                                    <p class="text-gray-400 font-medium">Nenhum registro encontrado para este filtro.</p>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot th:if="${!despesas.empty}" class="bg-dark text-white">
+                            <tr>
+                                <td colspan="4" class="px-10 py-8 text-right text-xs font-bold uppercase tracking-[0.2em] text-gray-400">Total Acumulado</td>
+                                <td class="px-10 py-8 text-right text-2xl font-bold" 
+                                    th:text="'R$ ' + ${#aggregates.sum(despesas.![valor])}">R$ 0,00</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
