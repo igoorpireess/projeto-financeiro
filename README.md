@@ -46,5 +46,39 @@ O **Financeiro PRO** é uma aplicação completa de gestão financeira desenvolv
    ```
 5. Acesse `http://localhost:8080` (admin/admin123).
 
+## Screenshots
+
+### Login
+<p align="center">
+  <img src="assets/login.png" width="900">
+</p>
+
+---
+
+### Dashboard
+<p align="center">
+  <img src="assets/dashboard.png" width="900">
+</p>
+
+---
+
+### Importação de Dados
+<p align="center">
+  <img src="assets/importardados.png" width="900">
+</p>
+
+---
+
+### Categorias
+<p align="center">
+  <img src="assets/categorias.png" width="900">
+</p>
+
+---
+
+### Relatórios
+<p align="center">
+  <img src="assets/relatorios.png" width="900">
+</p>
 ---
 Desenvolvido por Igor Pires(https://github.com/igoorpireess)
